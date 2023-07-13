@@ -1,0 +1,27 @@
+# Application
+/wp-content/*
+!/wp-content/languages
+!/wp-content/mu-plugins
+!/wp-content/plugins
+!/wp-content/themes
+wp-includes
+
+
+# WordPress
+wp-*.php
+wp-config.php
+.htaccess
+xmlrpc.php
+wp-admin
+
+# Logs
+*.log
+
+# Databases
+*.sql
+
+# OS-generated files
+.DS_Store
+
+# IDE
+.idea
