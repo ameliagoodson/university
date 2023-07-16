@@ -13,6 +13,9 @@ add_action('wp_enqueue_scripts', 'enqueue_ag_styles');
 
 function ag_features()
 {
+  register_nav_menu('Header', 'Header');
+  register_nav_menu('Footer1', 'Footer 1');
+  register_nav_menu('Footer2', 'Footer 2');
   add_theme_support('title-tag');
 }
 

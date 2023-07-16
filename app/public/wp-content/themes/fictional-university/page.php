@@ -28,11 +28,11 @@ while (have_posts()) {
     ?>
 
     <?php
-    $testarray = get_pages(array(
+    $pagesingle = get_pages(array(
       'child_of' => get_the_ID()
     ));
 
-    if ($has_parent or $testarray) { ?>
+    if ($has_parent or $pagesingle) { ?>
       <div class="page-links">
         <h2 class="page-links__title"><a href="<?php echo get_permalink($has_parent) ?>">
             <?php
@@ -48,7 +48,8 @@ while (have_posts()) {
           }
           wp_list_pages(array(
             'title_li' => null,
-            'child_of' => $findchildrenof
+            'child_of' => $findchildrenof,
+            'sort_column' => 'menu_order'
           ));
           ?>
         </ul>
