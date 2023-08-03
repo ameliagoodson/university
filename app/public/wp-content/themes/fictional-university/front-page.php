@@ -15,7 +15,7 @@
 $today = date('Ymd');
 $eventQuery = get_posts(array(
   'post_type' => 'event',
-  'posts_per_page' => -1,
+  'posts_per_page' => 2,
   // the custom field name
   'meta_key' => 'event_date',
   // order by the meta key

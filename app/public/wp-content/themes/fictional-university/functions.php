@@ -20,3 +20,82 @@ function ag_features()
 }
 
 add_action('after_setup_theme', 'ag_features');
+
+
+
+/* Manipulates DEFAULT query for events archive:
+    1. Ensures we are not affecting the admin-side posts
+    2. Specifies the post type archive
+    3. Final check to ensure we are not changing a custom query */
+function ag_adjust_queries($query)
+{
+  if (!is_admin() and is_post_type_archive('event') and $query->is_main_query()) {
+    $today = date('Ymd');
+    /* Pre_get_posts() receives the query object automatically
+       The query's set method takes two args:
+       1. name of the query param we want to change 
+       2. what you want to set the param to*/
+    $query->set('meta_key', 'event_date');
+    $query->set('orderby', 'meta_value_num');
+    $query->set('order', 'ASC');
+    $query->set('meta_query', array(
+      array(
+        'key' => 'event_date',
+        'compare' => '>=',
+        'value' => $today
+      )
+    ));
+  }
+}
+//  WP will reference this function before sending the query to the db - gives us a chance to adjust the query 
+add_action('pre_get_posts', 'ag_adjust_queries');
+
+
+
+/**
+ * Console log
+ */
+function console_log($obj)
+{
+  $data = json_encode(print_r($obj, true));
+?>
+  <style type="text/css">
+    #bsdLogger {
+      position: fixed;
+      top: 0px;
+      right: 0px;
+      border-left: 4px solid #bbb;
+      padding: 15px;
+      background: white;
+      color: #444;
+      z-index: 999;
+      font-size: 12px;
+      width: 25vw;
+      min-width: 300px;
+      max-width: 900px;
+      height: 100vh;
+      overflow: scroll;
+    }
+
+    body.admin-bar #bsdLogger {
+      padding-top: 80px;
+    }
+  </style>
+  <script type="text/javascript">
+    var debug = function() {
+      var obj = <?php echo $data; ?>;
+      var logger = document.getElementById('bsdLogger');
+      if (!logger) {
+        logger = document.createElement('div');
+        logger.id = 'bsdLogger';
+        document.body.appendChild(logger);
+      }
+      var pre = document.createElement('pre');
+      pre.classList.add('xdebug-var-dump');
+      pre.innerHTML = obj;
+      logger.appendChild(pre);
+    };
+    window.addEventListener("DOMContentLoaded", debug, false);
+  </script>
+<?php
+}
